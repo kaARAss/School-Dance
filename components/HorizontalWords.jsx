@@ -60,7 +60,7 @@ const HorizontalWords = () => {
                     textAlign: 'center',
                 });
 
-                const fullText = 'Танец — это не только движения, а способ дышать. Мы ставим технику, снимаем стеснение и доводим до сцены.';
+                const fullText = 'Танец — это не только движения, а способ дышать чем кажется. Мы ставим технику, снимаем стеснение и доводим до сцены.';
 
                 typeTarget.textContent = '';
                 const typedNode = document.createTextNode('');
@@ -254,8 +254,8 @@ const HorizontalWords = () => {
 
             <div className="horizontal-words__bottom-text">
                 <div className="horizontal-words__bottom-text-l">
-                    Танец — это не только движения, <em>а</em> способ дышать.<br />
-                    Мы ставим технику, снимаем стеснение<br />
+                    Танец — это не только движения, <em>а</em> способ дышать<br />
+                    чем кажется. Мы ставим технику, снимаем стеснение<br />
                     и доводим до сцены.
                 </div>
             </div>
