@@ -158,21 +158,69 @@ function initCardAnimations() {
         cards.forEach((card, i) => {
             gsap.set(card, { clearProps: 'all' });
             const rot = mobileRotations[i % mobileRotations.length];
+
+            // ─── Появление при прокрутке ───
             gsap.fromTo(card,
-                { y: 40, opacity: 0, rotation: rot },
+                { y: 70, opacity: 0, scale: 0.9, rotation: rot * 2.2 },
                 {
                     y: 0,
                     opacity: 1,
+                    scale: 1,
                     rotation: rot,
-                    duration: 0.55,
-                    ease: 'power2.out',
+                    duration: 0.85,
+                    ease: 'back.out(1.4)',
                     scrollTrigger: {
                         trigger: card,
-                        start: 'top 90%',
+                        start: 'top 88%',
+                        invalidateOnRefresh: true,
                         toggleActions: 'play none none none'
                     }
                 }
             );
+
+            // ─── Живое покачивание содержимого в такт прокрутке ───
+            const inner = Array.from(card.children);
+            if (inner.length) {
+                gsap.fromTo(inner,
+                    { y: 16 },
+                    {
+                        y: -16,
+                        ease: 'none',
+                        scrollTrigger: {
+                            trigger: card,
+                            start: 'top bottom',
+                            end: 'bottom top',
+                            scrub: 0.7
+                        }
+                    }
+                );
+            }
+
+            // ─── Отклик на касание вместо реакции на курсор ───
+            const onPress = () => {
+                gsap.to(card, {
+                    scale: 0.955,
+                    rotation: rot * 0.35,
+                    duration: 0.22,
+                    ease: 'power2.out',
+                    overwrite: 'auto',
+                });
+            };
+            const onRelease = () => {
+                gsap.to(card, {
+                    scale: 1,
+                    rotation: rot,
+                    duration: 1.1,
+                    ease: 'elastic.out(1, 0.4)',
+                    overwrite: 'auto',
+                });
+            };
+            card.addEventListener('touchstart', onPress, { passive: true });
+            card.addEventListener('touchend', onRelease);
+            card.addEventListener('touchcancel', onRelease);
         });
+
+        // Пересчёт позиций после подгрузки шрифтов и картинок
+        [400, 1200, 2500].forEach((ms) => setTimeout(() => ScrollTrigger.refresh(), ms));
     }
 }

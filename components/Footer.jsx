@@ -36,6 +36,7 @@ export default function Footer() {
 
 
         // ─── Footer sticker pop-up on scroll ───
+        const isPhone = window.matchMedia('(max-width: 768px)').matches;
         const footerStickers = gsap.utils.toArray('.footer-sticker');
         const stickerRotations = [12, -10, 8, -12, 10, -8];
         gsap.set(footerStickers, { scale: 0, opacity: 0, transformOrigin: 'center bottom' });
@@ -47,8 +48,9 @@ export default function Footer() {
             duration: 0.7, ease: 'back.out(1.7)', stagger: 0.12,
             scrollTrigger: {
                 trigger: '.footer-stickers',
-                start: 'top 80%',
-                toggleActions: 'play none none reverse' // Play on enter, reverse on leave up
+                start: isPhone ? 'top bottom' : 'top 80%',
+                invalidateOnRefresh: true,
+                toggleActions: isPhone ? 'play none none none' : 'play none none reverse'
             }
         });
 
@@ -98,6 +100,15 @@ export default function Footer() {
         // ─── Social icon wiggle ───
         document.querySelectorAll('.single-social').forEach(el => initWiggle(el, WIGGLE_CONFIG.socials));
 
+        // ─── Пересчёт позиций после подгрузки шрифтов и картинок ───
+        const refreshTimers = [400, 1200, 2500].map((ms) => setTimeout(() => ScrollTrigger.refresh(), ms));
+        const onLoad = () => ScrollTrigger.refresh();
+        window.addEventListener('load', onLoad);
+
+        return () => {
+            refreshTimers.forEach((id) => clearTimeout(id));
+            window.removeEventListener('load', onLoad);
+        };
     }, []);
 
     return (

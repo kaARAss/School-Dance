@@ -480,14 +480,8 @@
         gap: 0 !important;
         width: max-content;
         will-change: transform;
-    }
-
-    .marquee-column:nth-child(1) .marquee-track {
-        animation: marqueeRowLeft 32s linear infinite !important;
-    }
-
-    .marquee-column:nth-child(2) .marquee-track {
-        animation: marqueeRowRight 32s linear infinite !important;
+        /* движение задаёт GSAP из DoubleMarquee.jsx: marqueeJsRibbon */
+        animation: none !important;
     }
 
     .marquee-right .marquee-item {
@@ -497,13 +491,50 @@
         margin: 0 8px 0 0 !important;
     }
 
-    @keyframes marqueeRowLeft {
-        from { transform: translateX(0); }
-        to   { transform: translateX(-50%); }
+    .marquee-right .marquee-column {
+        height: 118px !important;
+        flex: none !important;
     }
 
-    @keyframes marqueeRowRight {
-        from { transform: translateX(-50%); }
-        to   { transform: translateX(0); }
+    /* 6. Меньше пустоты между текстом и блоком с фото */
+    .horizontal-words-section.is-mobile-static {
+        padding: 70px 0 0 !important;
+    }
+
+    .is-mobile-static .horizontal-words__bottom-text {
+        margin-top: 16px !important;
+        margin-bottom: 0 !important;
+    }
+
+    .motion-card-section {
+        padding-top: 26px !important;
+    }
+
+    /* 7. Стикеры в подвале: меньше штук и без кучи */
+    .footer-sticker.sticker-heart,
+    .footer-sticker.sticker-hands,
+    .footer-sticker.sticker-100 {
+        display: none !important;
+    }
+
+    .footer-sticker.sticker-boom {
+        left: 2% !important;
+        right: auto !important;
+        bottom: 30% !important;
+        width: 92px !important;
+    }
+
+    .footer-sticker.sticker-smiley {
+        left: 38% !important;
+        right: auto !important;
+        bottom: 7% !important;
+        width: 88px !important;
+    }
+
+    .footer-sticker.sticker-camera {
+        right: 3% !important;
+        left: auto !important;
+        bottom: 27% !important;
+        width: 88px !important;
     }
 }

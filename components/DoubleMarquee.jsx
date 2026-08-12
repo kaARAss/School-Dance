@@ -90,6 +90,75 @@ export default function DoubleMarquee() {
         };
     }, []);
 
+    // ─── Телефон: две бесконечные ленты в противоположные стороны ───
+    useEffect(() => {
+        if (!isMobile) return;
+        if (!tracks[0] || tracks[0].length === 0) return;
+
+        const right = document.querySelector('.marquee-right');
+        if (!right) return;
+
+        Object.assign(right.style, {
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '8px',
+            width: '100%',
+            height: 'auto',
+            overflow: 'hidden',
+            padding: '20px 0 32px',
+            margin: '0',
+        });
+
+        const tweens = [];
+        const columns = Array.from(right.querySelectorAll('.marquee-column'));
+
+        columns.forEach((column, index) => {
+            Object.assign(column.style, {
+                display: 'block',
+                position: 'relative',
+                width: '100%',
+                height: '118px',
+                flex: 'none',
+                overflow: 'hidden',
+                animation: 'none',
+            });
+
+            const track = column.querySelector('.marquee-track');
+            if (!track) return;
+
+            Object.assign(track.style, {
+                display: 'flex',
+                flexDirection: 'row',
+                flexWrap: 'nowrap',
+                gap: '0',
+                width: 'max-content',
+                height: '118px',
+                animation: 'none',
+                willChange: 'transform',
+            });
+
+            Array.from(track.querySelectorAll('.marquee-item')).forEach((item) => {
+                Object.assign(item.style, {
+                    width: '118px',
+                    height: '118px',
+                    flex: '0 0 118px',
+                    margin: '0 8px 0 0',
+                });
+            });
+
+            const toLeft = index === 0;
+            gsap.set(track, { xPercent: toLeft ? 0 : -50 });
+            tweens.push(gsap.to(track, {
+                xPercent: toLeft ? -50 : 0,
+                duration: 30,
+                ease: 'none',
+                repeat: -1,
+            }));
+        });
+
+        return () => { tweens.forEach((t) => t.kill()); };
+    }, [isMobile, tracks]);
+
     return (
         <>
             {/* Left: Text + Blob */}
