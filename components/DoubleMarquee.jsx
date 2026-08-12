@@ -225,7 +225,7 @@ export default function DoubleMarquee() {
                 aria-hidden="true"
                 style={{
                     flex: '0 0 auto',
-                    width: 'min(34vw, 520px)',
+                    width: 'min(42vw, 660px)',
                     alignSelf: 'center',
                     margin: '0 auto',
                     padding: '10px',
@@ -246,7 +246,7 @@ export default function DoubleMarquee() {
                         display: 'block',
                         width: '100%',
                         height: 'auto',
-                        aspectRatio: '4 / 5',
+                        aspectRatio: '4 / 5.3',
                         objectFit: 'cover',
                         borderRadius: '22px',
                     }}

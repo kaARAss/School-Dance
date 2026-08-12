@@ -105,6 +105,32 @@ const HorizontalWords = () => {
             const entranceDistance = window.innerHeight;
             const pinnedDistance = 2500;
 
+            // Конечная точка горизонтальной промотки: лента останавливается тогда,
+            // когда последняя стрелка оказывается по центру экрана — ровно над абзацем
+            const endArrow = container.querySelector('.horizontal-words__arrow-end-svg');
+
+            const offsetWithin = (el, root) => {
+                let x = 0;
+                let node = el;
+                while (node && node !== root) {
+                    x += node.offsetLeft;
+                    node = node.offsetParent;
+                }
+                return x;
+            };
+
+            const finalX = () => {
+                const fallback = -(textRef.scrollWidth - window.innerWidth * 0.5);
+                if (!endArrow) return fallback;
+                const w = endArrow.offsetWidth;
+                if (!w) return fallback;
+                // left: 100% + transform: translate(50%) → центр стрелки смещён на её ширину
+                const arrowCenter = offsetWithin(endArrow, textRef) + w;
+                const target = window.innerWidth * 0.5 - arrowCenter;
+                // Никогда не проматываем дальше старого предела
+                return Math.max(target, fallback);
+            };
+
             const scrollTween = gsap.timeline({
                 scrollTrigger: {
                     trigger: container,
@@ -124,7 +150,7 @@ const HorizontalWords = () => {
                     duration: entranceDistance
                 })
                 .to(textRef, {
-                    x: () => -(textRef.scrollWidth - window.innerWidth * 0.5),
+                    x: finalX,
                     ease: "none",
                     duration: pinnedDistance
                 });
