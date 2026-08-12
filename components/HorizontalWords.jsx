@@ -117,9 +117,8 @@ const HorizontalWords = () => {
                 const trackRect = textRef.getBoundingClientRect();
                 if (!arrowRect.width || !trackRect.width) return fallback;
 
-                // Измеряем по реальным координатам: так учтены и отступы ленты,
-                // и собственный сдвиг стрелки. Смещение внутри ленты не зависит
-                // от текущего положения — оба прямоугольника едут вместе.
+                // Измеряем по реальным экранным координатам: так учтены
+                // и отступы ленты, и собственный сдвиг стрелки.
                 const currentX = Number(gsap.getProperty(textRef, 'x')) || 0;
                 const arrowCenter = arrowRect.left + arrowRect.width / 2 - trackRect.left;
                 const trackLeft = trackRect.left - currentX;
