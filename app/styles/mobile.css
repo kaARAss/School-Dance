@@ -553,7 +553,7 @@
 
 /* ═══ Волна 9: фото в рамке — только на компьютере ═══ */
 @media (max-width: 768px) {
-    .horizontal-words__photo {
+    .marquee-photo {
         display: none !important;
     }
 }
