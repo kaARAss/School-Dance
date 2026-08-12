@@ -9,6 +9,7 @@ export default function VimeoHero() {
     const bubbleRef = useRef(null);
     const titleRef = useRef(null);
     const controlsRef = useRef(null);
+    const userPausedRef = useRef(false);
 
     const [isPlaying, setIsPlaying] = useState(true);
     const [isMuted, setIsMuted] = useState(true);
@@ -101,18 +102,70 @@ export default function VimeoHero() {
         if (!iframeRef.current) return;
         if (isPlaying) {
             iframeRef.current.pause();
+            userPausedRef.current = true;
         } else {
-            iframeRef.current.play();
+            iframeRef.current.play().catch(() => {});
+            userPausedRef.current = false;
         }
         setIsPlaying(p => !p);
     };
 
     const toggleMute = (e) => {
         if (e) e.stopPropagation();
-        if (!iframeRef.current) return;
-        iframeRef.current.muted = !isMuted;
-        setIsMuted(m => !m);
+        const video = iframeRef.current;
+        if (!video) return;
+        const nextMuted = !isMuted;
+        video.muted = nextMuted;
+        if (!nextMuted) {
+            video.volume = 1;
+            userPausedRef.current = false;
+            video.play().catch(() => {});
+            setIsPlaying(true);
+        }
+        setIsMuted(nextMuted);
     };
+
+    /* ── Экономия ресурсов: пауза, когда ролик ушёл с экрана или вкладка неактивна ── */
+    useEffect(() => {
+        const video = iframeRef.current;
+        if (!video) return;
+
+        const resume = () => {
+            if (userPausedRef.current || document.hidden) return;
+            video.play().catch(() => {});
+            setIsPlaying(true);
+        };
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                const entry = entries[0];
+                if (!entry) return;
+                if (entry.isIntersecting) {
+                    resume();
+                } else if (!video.paused) {
+                    video.pause();
+                    setIsPlaying(false);
+                }
+            },
+            { threshold: 0.12 }
+        );
+        observer.observe(video);
+
+        const onVisibility = () => {
+            if (document.hidden) {
+                video.pause();
+            } else {
+                const box = video.getBoundingClientRect();
+                if (box.bottom > 0 && box.top < window.innerHeight) resume();
+            }
+        };
+        document.addEventListener('visibilitychange', onVisibility);
+
+        return () => {
+            observer.disconnect();
+            document.removeEventListener('visibilitychange', onVisibility);
+        };
+    }, []);
 
     const toggleFullscreen = (e) => {
         if (e) e.stopPropagation();
@@ -166,18 +219,18 @@ export default function VimeoHero() {
                 ref={playerRef}
                 onClick={toggleMute}
             >
-                {/* 
-                  Video Placeholder: 
-                  Currently left blank to display a solid black background while you work on text, SVGs, and the navbar.
-                  Once you have your personal video file in the `public/` folder, uncomment and update the src below!
-                */}
+                {/* Ролик школы. Первый кадр показывается мгновенно, звук включается кликом. */}
                 <video
                     ref={iframeRef}
-                    // src="/your-personal-video.mp4"
+                    src="/assets/hero.mp4"
+                    poster="/assets/hero-poster.jpg"
+                    preload="auto"
                     autoPlay
                     loop
                     muted
                     playsInline
+                    disablePictureInPicture
+                    onLoadedData={() => setIsLoaded(true)}
                     className="vimeo-hero__iframe"
                     style={{ objectFit: 'cover', backgroundColor: '#111' }}
                 />

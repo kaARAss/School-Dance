@@ -121,16 +121,16 @@ export default function Footer() {
                             <path d="M32.1313 8.63371C68.2147 6.92799 104.462 6.13378 140.695 6.25107" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.25"></path>
                         </svg>
                     </a>
-                    <div style={{ marginTop: "22px", maxWidth: "440px", borderRadius: "22px", border: "3px solid currentColor", overflow: "hidden", lineHeight: 0, boxShadow: "6px 6px 0 rgba(0,0,0,0.35)" }}>
+                    <div style={{ marginTop: "22px", maxWidth: "1320px", width: "100%", borderRadius: "28px", border: "4px solid var(--color-dark, #1a1a1a)", overflow: "hidden", lineHeight: 0, padding: "7px", backgroundColor: "var(--color-lightgreen, #e6fab9)", boxShadow: "12px 12px 0 var(--color-lightblue, #82a0ff)" }}>
                         <iframe
                             src="https://yandex.ru/map-widget/v1/?ll=37.617700%2C55.755800&z=15&pt=37.617700,55.755800,pm2rdm"
                             title="Наша студия на карте"
                             width="100%"
-                            height="150"
+                            height="132"
                             frameBorder="0"
                             allowFullScreen={true}
                             loading="lazy"
-                            style={{ display: "block", border: "none" }}
+                            style={{ display: "block", border: "none", borderRadius: "21px" }}
                         ></iframe>
                     </div>
                 </div>

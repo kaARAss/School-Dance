@@ -5,6 +5,16 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { CARDS_DATA } from '@/lib/data';
 
+// Горизонтальные позиции карточек: равный шаг 265px при ширине 320px,
+// чтобы все перекрытия были одинаковыми и текст не срезался.
+const CARD_LEFT = [
+    'calc(50% - 690px)',
+    'calc(50% - 425px)',
+    'calc(50% - 160px)',
+    'calc(50% + 105px)',
+    'calc(50% + 370px)'
+];
+
 export default function ServiceCards() {
     useEffect(() => {
         gsap.registerPlugin(ScrollTrigger);
@@ -37,9 +47,9 @@ export default function ServiceCards() {
             </div>
 
             {/* ─── Service Cards ─── */}
-            <div className="cards-wrapper" id="cards-wrapper">
-                {CARDS_DATA.map((card) => (
-                    <div key={card.color} className={`card card-${card.color}`}>
+            <div className="cards-wrapper" id="cards-wrapper" style={{ margin: "100px auto" }}>
+                {CARDS_DATA.map((card, index) => (
+                    <div key={card.color} className={`card card-${card.color}`} style={{ left: CARD_LEFT[index] }}>
                         <div className={`card-sticker sticker-${card.sticker}`}>
                             <img
                                 src={`/assets/Card-Sticker SVG/sticker-${card.sticker}.svg`}

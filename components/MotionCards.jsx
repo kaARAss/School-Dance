@@ -7,6 +7,9 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(InertiaPlugin, ScrollTrigger);
 
+// Ограничитель смещения: карточка отходит от курсора не дальше 45px
+const clampPush = (v) => Math.max(-45, Math.min(45, v));
+
 export default function MotionCards() {
     const sectionRef = useRef(null);
     const containerRef = useRef(null);
@@ -20,6 +23,8 @@ export default function MotionCards() {
                 let lastY = 0;
                 let speedX = 0;
                 let speedY = 0;
+                let offX = 0;
+                let offY = 0;
 
                 const startRotation = gsap.getProperty(card, "rotation");
                 const startX = gsap.getProperty(card, "x");
@@ -30,6 +35,18 @@ export default function MotionCards() {
                     speedY = e.clientY - lastY;
                     lastX = e.clientX;
                     lastY = e.clientY;
+
+                    // Реакция сразу под курсором, а не только при уходе с неё
+                    offX = clampPush(offX + speedX * 0.35);
+                    offY = clampPush(offY + speedY * 0.35);
+                    gsap.to(card, {
+                        x: startX + offX,
+                        y: startY + offY,
+                        rotation: startRotation + offX * 0.05,
+                        duration: 0.45,
+                        ease: "power3.out",
+                        overwrite: true,
+                    });
                 };
 
                 const onEnter = (e) => {
@@ -40,7 +57,10 @@ export default function MotionCards() {
                 };
 
                 const onLeave = () => {
+                    offX = 0;
+                    offY = 0;
                     gsap.to(card, {
+                        overwrite: true,
                         inertia: {
                             x: { velocity: speedX * 20, end: startX },
                             y: { velocity: speedY * 20, end: startY },
@@ -61,6 +81,8 @@ export default function MotionCards() {
                 let lastY = 0;
                 let speedX = 0;
                 let speedY = 0;
+                let offX = 0;
+                let offY = 0;
 
                 const startRotation = gsap.getProperty(label, "rotation");
                 const startX = gsap.getProperty(label, "x");
@@ -71,6 +93,18 @@ export default function MotionCards() {
                     speedY = e.clientY - lastY;
                     lastX = e.clientX;
                     lastY = e.clientY;
+
+                    // Реакция сразу под курсором, а не только при уходе с неё
+                    offX = clampPush(offX + speedX * 0.45);
+                    offY = clampPush(offY + speedY * 0.45);
+                    gsap.to(label, {
+                        x: startX + offX,
+                        y: startY + offY,
+                        rotation: startRotation + offX * 0.07,
+                        duration: 0.45,
+                        ease: "power3.out",
+                        overwrite: true,
+                    });
                 };
 
                 const onEnter = (e) => {
@@ -81,7 +115,10 @@ export default function MotionCards() {
                 };
 
                 const onLeave = () => {
+                    offX = 0;
+                    offY = 0;
                     gsap.to(label, {
+                        overwrite: true,
                         inertia: {
                             x: { velocity: speedX * 25, end: startX },
                             y: { velocity: speedY * 25, end: startY },
@@ -135,7 +172,7 @@ export default function MotionCards() {
                 <p className="motion-card__subtitle">
                     от первого шага до сцены.
                     {/* SVG sticker placeholder — top-right area */}
-                    <span className="motion-card__sticker motion-card__sticker--top" style={{ right: "-108px", top: "-34px" }}>
+                    <span className="motion-card__sticker motion-card__sticker--top" style={{ right: "-120px", top: "-34px" }}>
                         <img
                             src="/assets/Footer-Sticker SVG/footer-sticker-hands.svg"
                             alt="Стикер с сердцем"
