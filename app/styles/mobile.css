@@ -1,0 +1,238 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   МОБИЛЬНАЯ ОПТИМИЗАЦИЯ
+   Все правила заперты внутри медиа-запросов для узких и сенсорных экранов,
+   поэтому вид сайта на компьютере не меняется ни на пиксель.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+
+    /* ── Общее: убираем горизонтальную прокрутку и автоувеличение шрифта ── */
+    html {
+        -webkit-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+    }
+
+    body {
+        overflow-x: hidden;
+    }
+
+    img,
+    svg,
+    video,
+    iframe {
+        max-width: 100%;
+    }
+
+    /* ── Первый экран с роликом ── */
+    .vimeo-hero {
+        width: calc(100% - 16px);
+        height: calc(100svh - 16px);
+    }
+
+    .vimeo-hero__iframe {
+        min-height: 100svh;
+        min-width: 177.78svh;
+    }
+
+    .home-header__title {
+        padding: 0 18px;
+    }
+
+    .vimeo-hero__title {
+        font-size: clamp(1.9rem, 10.5vw, 3.2rem);
+        line-height: 1.05;
+    }
+
+    .vimeo-hero__controls {
+        gap: 10px;
+    }
+
+    /* Кнопки под палец, а не под курсор */
+    .vimeo-hero__btn {
+        width: 44px;
+        height: 44px;
+    }
+
+    /* ── Шапка ── */
+    .navbar {
+        padding: 10px 12px;
+    }
+
+    .logo-truus {
+        width: 92px;
+        height: auto;
+    }
+
+    .logo-work-container {
+        width: 42px;
+        height: 38px;
+    }
+
+    .logo-work-text {
+        font-size: 1.05rem;
+        margin-left: 44px;
+    }
+
+    .nav-right {
+        gap: 8px !important;
+    }
+
+    .nav-social-btn {
+        min-width: 38px;
+        min-height: 38px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .nav-social-btn svg {
+        width: 24px;
+        height: 24px;
+    }
+
+    .nav-bar__whatsapp-svg {
+        width: 24px;
+    }
+
+    /* ── Блок с веером фотографий ── */
+    .motion-card__heading {
+        max-width: 100%;
+        padding: 0 18px;
+    }
+
+    .motion-card__title {
+        font-size: 2.4rem;
+    }
+
+    .motion-card__subtitle {
+        font-size: 2.5rem;
+    }
+
+    .motion-card__underline-svg {
+        max-width: 260px;
+    }
+
+    .motion-card__sticker--top {
+        width: 84px !important;
+        height: 46px !important;
+        right: -4px !important;
+        top: -26px !important;
+    }
+
+    .motion-card__cards-area {
+        height: 64vw;
+        max-width: 100%;
+    }
+
+    .motion-card__card {
+        width: 34vw;
+        height: 44vw;
+    }
+
+    .motion-card__blob {
+        width: 92vw;
+        height: 58vw;
+    }
+
+    /* ── Блок с бегущими словами ── */
+    .horizontal-words-section {
+        height: 72svh;
+    }
+
+    .horizontal-words__relative {
+        padding-left: 15vw;
+        padding-right: 15vw;
+    }
+
+    .horizontal-words__h2 {
+        font-size: 16vw;
+    }
+
+    .horizontal-words__bottom-text {
+        width: 90vw;
+        transform: translate(-50%, 5.5em);
+    }
+
+    .horizontal-words__bottom-text-l {
+        font-size: 0.98rem;
+    }
+
+    .horizontal-words__sticker-watch {
+        width: 3.6em !important;
+    }
+
+    .horizontal-words__sticker-cursor {
+        width: 4.4em !important;
+    }
+
+    .horizontal-words__sticker-phone {
+        width: 4.6em !important;
+    }
+
+    .horizontal-words__arrow-svg {
+        width: 12em;
+    }
+
+    .horizontal-words__arrow-end-svg {
+        width: 5em;
+    }
+
+    /* ── Тёмный блок ── */
+    .showreel-section {
+        min-height: 70svh;
+    }
+
+    .showreel__title {
+        font-size: 2.4rem;
+        letter-spacing: -1.5px;
+    }
+
+    .showreel__subtitle {
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+    }
+
+    /* ── Карточки направлений ── */
+    .card {
+        padding: 2.2rem 1.2rem 1.2rem;
+    }
+
+    .card-list li {
+        font-size: 1rem;
+    }
+
+    /* ── Подвал ── */
+    .footer-inner {
+        min-height: auto;
+    }
+
+    .footer-bottom {
+        margin-top: 90px;
+    }
+}
+
+/* ═══ Сенсорные экраны: всё, что рассчитано на мышь, только мешает ═══ */
+@media (hover: none) and (pointer: coarse) {
+
+    /* Свой курсор и пузырёк со звуком пальцем не наводятся */
+    .cursor-bubble,
+    .vimeo-mute-bubble {
+        display: none !important;
+    }
+
+    /* Выпадающие меню шапки открываются наведением, на телефоне они
+       только перекрывают экран невидимыми блоками */
+    .nav-popout,
+    .nav-overlay {
+        display: none !important;
+    }
+
+    /* Картинки курсоров прописаны прямо в разметке — снимаем */
+    * {
+        cursor: auto !important;
+    }
+
+    /* Невидимая зона наведения у карточек ловила касания мимо цели */
+    .card::after {
+        display: none;
+    }
+}

@@ -9,16 +9,36 @@ export default function SmoothScroll() {
     useEffect(() => {
         gsap.registerPlugin(ScrollTrigger);
 
-        const lenis = new Lenis({
-            duration: 1.2,
-            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-            smoothWheel: true,
-            touchMultiplier: 1.5,
-        });
+        // На сенсорных экранах инерционная прокрутка борется с родной прокруткой
+        // телефона и даёт рывки, поэтому там её не включаем.
+        const isTouch = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
 
-        lenis.on('scroll', ScrollTrigger.update);
-        gsap.ticker.add((time) => { lenis.raf(time * 1000); });
-        gsap.ticker.lagSmoothing(0);
+        let lenis = null;
+        let tickerFn = null;
+
+        if (!isTouch) {
+            lenis = new Lenis({
+                duration: 1.2,
+                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+                smoothWheel: true,
+                touchMultiplier: 1.5,
+            });
+
+            lenis.on('scroll', ScrollTrigger.update);
+            tickerFn = (time) => { lenis.raf(time * 1000); };
+            gsap.ticker.add(tickerFn);
+            gsap.ticker.lagSmoothing(0);
+            window.__lenis = lenis;
+        }
+
+        // Пересчёт анимаций при повороте экрана и при появлении панелей браузера
+        let resizeTimer = null;
+        const onResize = () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => ScrollTrigger.refresh(), 250);
+        };
+        window.addEventListener('orientationchange', onResize);
+        window.addEventListener('resize', onResize);
 
         // Dynamic Tab Title Change
         const originalTitle = document.title;
@@ -27,13 +47,16 @@ export default function SmoothScroll() {
         };
         document.addEventListener('visibilitychange', handleVisibility);
 
-        // Store lenis on window so other components can access it
-        window.__lenis = lenis;
-
         return () => {
-            lenis.destroy();
+            if (lenis) {
+                if (tickerFn) gsap.ticker.remove(tickerFn);
+                lenis.destroy();
+                delete window.__lenis;
+            }
+            clearTimeout(resizeTimer);
+            window.removeEventListener('orientationchange', onResize);
+            window.removeEventListener('resize', onResize);
             document.removeEventListener('visibilitychange', handleVisibility);
-            delete window.__lenis;
         };
     }, []);
 

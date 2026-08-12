@@ -15,6 +15,16 @@ export default function VimeoHero() {
     const [isMuted, setIsMuted] = useState(true);
     const [isFullscreen, setIsFullscreen] = useState(false);
     const [isLoaded, setIsLoaded] = useState(false);
+    const [videoSrc, setVideoSrc] = useState(null);
+
+    /* ── Телефону отдаём лёгкую копию ролика, компьютеру — полное качество ── */
+    useEffect(() => {
+        const narrow = window.matchMedia('(max-width: 768px)').matches;
+        const conn = navigator.connection;
+        const saveData = !!(conn && (conn.saveData || /2g/.test(conn.effectiveType || '')));
+        setVideoSrc(narrow || saveData ? '/assets/hero-mobile.mp4' : '/assets/hero.mp4');
+    }, []);
+
 
     // Native video loads immediately enough that we don't need a heavy ready listener.
     // We already handle `setIsLoaded(true)` directly on the <video onLoadedData={...}> element.
@@ -222,7 +232,7 @@ export default function VimeoHero() {
                 {/* Ролик школы. Первый кадр показывается мгновенно, звук включается кликом. */}
                 <video
                     ref={iframeRef}
-                    src="/assets/hero.mp4"
+                    src={videoSrc || undefined}
                     poster="/assets/hero-poster.jpg"
                     preload="auto"
                     autoPlay

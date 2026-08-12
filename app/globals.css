@@ -24,4 +24,6 @@
 @import './styles/cursor.css';
 /* Custom cursor bubble + scribble overlay  */
 @import './styles/responsive.css';
+@import './styles/mobile.css';
+/* Мобильная оптимизация — только узкие и сенсорные экраны */
 /* All media queries (tablet + mobile)      */

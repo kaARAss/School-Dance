@@ -8,6 +8,12 @@ export default function CursorBubble() {
         const cursorBubble = document.querySelector('.cursor-bubble');
         if (!cursorBubble) return;
 
+        // На сенсорном экране курсора нет — пузырёк только грузит страницу
+        if (window.matchMedia('(hover: none) and (pointer: coarse)').matches) {
+            cursorBubble.style.display = 'none';
+            return;
+        }
+
         const xTo = gsap.quickTo(cursorBubble, 'x', { duration: 0.5, ease: 'power3' });
         const yTo = gsap.quickTo(cursorBubble, 'y', { duration: 0.5, ease: 'power3' });
 
