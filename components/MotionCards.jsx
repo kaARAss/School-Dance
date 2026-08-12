@@ -176,15 +176,15 @@ export default function MotionCards() {
                 const footerText = sectionRef.current.querySelector('.motion-card__footer-text');
                 const descr = sectionRef.current.querySelector('.motion-card__description');
 
-                if (footerText && descr && !descr.dataset.typed) {
-                    descr.dataset.typed = '1';
+                if (footerText && descr && !descr.dataset.styled) {
+                    descr.dataset.styled = '1';
 
                     // Спускаем ниже и даём воздуха, чтобы текст не наезжал ни на фотографии
                     // сверху, ни на тёмный блок снизу
                     Object.assign(footerText.style, {
                         maxWidth: '900px',
-                        marginTop: '120px',
-                        paddingBottom: '110px',
+                        marginTop: '210px',
+                        paddingBottom: '120px',
                         position: 'relative',
                         zIndex: '5',
                     });
@@ -195,44 +195,8 @@ export default function MotionCards() {
                         fontWeight: '700',
                         lineHeight: '1.28',
                         letterSpacing: '-0.8px',
-                        minHeight: '5.2em',
                     });
 
-                    const descrText = 'Мы учим танцевать с нуля и доводим до сцены. Хип-хоп, балет, heels, contemporary и группы для детей — занятия каждый день, отчётные концерты и баттлы.';
-
-                    descr.textContent = '';
-                    const descrNode = document.createTextNode('');
-                    descr.appendChild(descrNode);
-
-                    const descrCaret = document.createElement('span');
-                    descrCaret.textContent = '\u258c';
-                    descrCaret.setAttribute('aria-hidden', 'true');
-                    Object.assign(descrCaret.style, {
-                        marginLeft: '0.06em',
-                        color: 'var(--color-orange, #f5693c)',
-                    });
-                    descr.appendChild(descrCaret);
-
-                    gsap.to(descrCaret, { opacity: 0, duration: 0.45, repeat: -1, yoyo: true, ease: 'steps(1)' });
-
-                    const descrState = { chars: 0 };
-                    gsap.to(descrState, {
-                        chars: descrText.length,
-                        duration: descrText.length * 0.022,
-                        ease: 'none',
-                        scrollTrigger: {
-                            trigger: footerText,
-                            start: 'top 80%',
-                            once: true,
-                        },
-                        onUpdate: () => {
-                            descrNode.nodeValue = descrText.slice(0, Math.round(descrState.chars));
-                        },
-                        onComplete: () => {
-                            descrNode.nodeValue = descrText;
-                            gsap.to(descrCaret, { opacity: 0, duration: 0.4, delay: 1.2, overwrite: true });
-                        },
-                    });
                 }
             }
         }, sectionRef);

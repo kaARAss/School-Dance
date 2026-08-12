@@ -100,6 +100,25 @@ export default function Footer() {
         // ─── Social icon wiggle ───
         document.querySelectorAll('.single-social').forEach(el => initWiggle(el, WIGGLE_CONFIG.socials));
 
+        // ─── Карта: на компьютере делаем её квадратной по ширине блока.
+        // На телефоне не трогаем — там остаётся невысокая полоса.
+        let onMapResize = null;
+        if (!isPhone) {
+            const mapFrame = document.querySelector('.footer-column iframe');
+            if (mapFrame) {
+                const applySquare = () => {
+                    const wrap = mapFrame.parentElement;
+                    if (!wrap) return;
+                    const inner = wrap.clientWidth - 14;
+                    if (inner > 0) mapFrame.style.height = inner + 'px';
+                };
+                applySquare();
+                setTimeout(applySquare, 600);
+                onMapResize = applySquare;
+                window.addEventListener('resize', onMapResize);
+            }
+        }
+
         // ─── Пересчёт позиций после подгрузки шрифтов и картинок ───
         const refreshTimers = [1400].map((ms) => setTimeout(() => ScrollTrigger.refresh(), ms));
         const onLoad = () => ScrollTrigger.refresh();
@@ -108,6 +127,7 @@ export default function Footer() {
         return () => {
             refreshTimers.forEach((id) => clearTimeout(id));
             window.removeEventListener('load', onLoad);
+            if (onMapResize) window.removeEventListener('resize', onMapResize);
         };
     }, []);
 
@@ -132,7 +152,7 @@ export default function Footer() {
                             <path d="M32.1313 8.63371C68.2147 6.92799 104.462 6.13378 140.695 6.25107" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.25"></path>
                         </svg>
                     </a>
-                    <div style={{ marginTop: "22px", maxWidth: "1320px", width: "100%", borderRadius: "28px", border: "4px solid var(--color-dark, #1a1a1a)", overflow: "hidden", lineHeight: 0, padding: "7px", backgroundColor: "var(--color-lightgreen, #e6fab9)" }}>
+                    <div style={{ marginTop: "22px", maxWidth: "660px", width: "100%", borderRadius: "28px", border: "4px solid var(--color-dark, #1a1a1a)", overflow: "hidden", lineHeight: 0, padding: "7px", backgroundColor: "var(--color-lightgreen, #e6fab9)" }}>
                         <iframe
                             src="https://yandex.ru/map-widget/v1/?ll=37.617700%2C55.755800&z=15&pt=37.617700,55.755800,pm2rdm"
                             title="Наша студия на карте"

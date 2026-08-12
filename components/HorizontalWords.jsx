@@ -66,17 +66,6 @@ const HorizontalWords = () => {
                 const typedNode = document.createTextNode('');
                 typeTarget.appendChild(typedNode);
 
-                const caret = document.createElement('span');
-                caret.textContent = '▌';
-                caret.setAttribute('aria-hidden', 'true');
-                Object.assign(caret.style, {
-                    marginLeft: '0.06em',
-                    color: 'var(--color-orange, #f5693c)',
-                });
-                typeTarget.appendChild(caret);
-
-                gsap.to(caret, { opacity: 0, duration: 0.45, repeat: -1, yoyo: true, ease: 'steps(1)' });
-
                 const typeState = { chars: 0 };
                 gsap.to(typeState, {
                     chars: fullText.length,
@@ -94,7 +83,6 @@ const HorizontalWords = () => {
                     },
                     onComplete: () => {
                         typedNode.nodeValue = fullText;
-                        gsap.to(caret, { opacity: 0, duration: 0.4, delay: 1.2, overwrite: true });
                     },
                 });
             }
