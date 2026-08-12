@@ -153,6 +153,88 @@ export default function MotionCards() {
                 gsap.set(underlinePath, { strokeDasharray: pathLen, strokeDashoffset: pathLen });
                 tl.to(underlinePath, { strokeDashoffset: 0, duration: 1.5, ease: "power2.out" }, 0.2);
             }
+            // ─── Только ПК: крупные стикеры и набор нижнего абзаца ───
+            const isDesktop = window.matchMedia('(min-width: 769px)').matches;
+
+            if (isDesktop) {
+                // Плашки-подписи над карточками были слишком мелкими
+                sectionRef.current.querySelectorAll('.motion-card__floating-label').forEach((label) => {
+                    Object.assign(label.style, {
+                        padding: '0.5vw 1.15vw',
+                        boxShadow: '0 6px 18px rgba(0,0,0,0.08)',
+                    });
+                    const inner = label.querySelector('.motion-card__floating-text');
+                    if (inner) {
+                        Object.assign(inner.style, {
+                            fontSize: 'clamp(1.15rem, 1.35vw, 1.65rem)',
+                            fontWeight: '600',
+                            letterSpacing: '-0.3px',
+                        });
+                    }
+                });
+
+                const footerText = sectionRef.current.querySelector('.motion-card__footer-text');
+                const descr = sectionRef.current.querySelector('.motion-card__description');
+
+                if (footerText && descr && !descr.dataset.typed) {
+                    descr.dataset.typed = '1';
+
+                    // Спускаем ниже и даём воздуха, чтобы текст не наезжал ни на фотографии
+                    // сверху, ни на тёмный блок снизу
+                    Object.assign(footerText.style, {
+                        maxWidth: '900px',
+                        marginTop: '120px',
+                        paddingBottom: '110px',
+                        position: 'relative',
+                        zIndex: '5',
+                    });
+
+                    Object.assign(descr.style, {
+                        fontFamily: "'Epilogue', sans-serif",
+                        fontSize: 'clamp(1.5rem, 1.9vw, 2.2rem)',
+                        fontWeight: '700',
+                        lineHeight: '1.28',
+                        letterSpacing: '-0.8px',
+                        minHeight: '5.2em',
+                    });
+
+                    const descrText = 'Мы учим танцевать с нуля и доводим до сцены. Хип-хоп, балет, heels, contemporary и группы для детей — занятия каждый день, отчётные концерты и баттлы.';
+
+                    descr.textContent = '';
+                    const descrNode = document.createTextNode('');
+                    descr.appendChild(descrNode);
+
+                    const descrCaret = document.createElement('span');
+                    descrCaret.textContent = '\u258c';
+                    descrCaret.setAttribute('aria-hidden', 'true');
+                    Object.assign(descrCaret.style, {
+                        marginLeft: '0.06em',
+                        color: 'var(--color-orange, #f5693c)',
+                    });
+                    descr.appendChild(descrCaret);
+
+                    gsap.to(descrCaret, { opacity: 0, duration: 0.45, repeat: -1, yoyo: true, ease: 'steps(1)' });
+
+                    const descrState = { chars: 0 };
+                    gsap.to(descrState, {
+                        chars: descrText.length,
+                        duration: descrText.length * 0.022,
+                        ease: 'none',
+                        scrollTrigger: {
+                            trigger: footerText,
+                            start: 'top 80%',
+                            once: true,
+                        },
+                        onUpdate: () => {
+                            descrNode.nodeValue = descrText.slice(0, Math.round(descrState.chars));
+                        },
+                        onComplete: () => {
+                            descrNode.nodeValue = descrText;
+                            gsap.to(descrCaret, { opacity: 0, duration: 0.4, delay: 1.2, overwrite: true });
+                        },
+                    });
+                }
+            }
         }, sectionRef);
 
         return () => ctx.revert();

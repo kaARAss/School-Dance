@@ -83,8 +83,10 @@ const HorizontalWords = () => {
                     duration: fullText.length * 0.026,
                     ease: 'none',
                     scrollTrigger: {
+                        // Блок прибивается к экрану, поэтому абзац становится видным не когда
+                        // секция заходит в окно снизу, а когда она встаёт на весь экран.
                         trigger: container,
-                        start: 'top 85%',
+                        start: 'top top',
                         once: true,
                     },
                     onUpdate: () => {
