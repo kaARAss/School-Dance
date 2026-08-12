@@ -550,3 +550,10 @@
         transform-style: flat;
     }
 }
+
+/* ═══ Волна 9: фото в рамке — только на компьютере ═══ */
+@media (max-width: 768px) {
+    .horizontal-words__photo {
+        display: none !important;
+    }
+}

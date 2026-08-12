@@ -140,6 +140,46 @@ const HorizontalWords = () => {
             });
             // ------------------------------------
 
+            // Абзац справа от стрелки уезжает влево вместе со словами,
+            // пока стрелка не дойдёт до середины экрана
+            const bottomText = container.querySelector('.horizontal-words__bottom-text');
+            if (bottomText) {
+                gsap.to(bottomText, {
+                    xPercent: -150,
+                    ease: 'none',
+                    scrollTrigger: {
+                        trigger: container,
+                        start: 'top top',
+                        end: () => `+=${pinnedDistance * 0.55}`,
+                        scrub: 1,
+                        invalidateOnRefresh: true,
+                    },
+                });
+            }
+
+            // Фото в рамке закрывает пустоту между стрелкой и бегущей лентой
+            const photoFrame = container.querySelector('.horizontal-words__photo');
+            if (photoFrame) {
+                gsap.fromTo(
+                    photoFrame,
+                    { opacity: 0, scale: 0.8, rotation: -14, yPercent: 12 },
+                    {
+                        opacity: 1,
+                        scale: 1,
+                        rotation: -4,
+                        yPercent: 0,
+                        ease: 'none',
+                        scrollTrigger: {
+                            trigger: container,
+                            start: 'top top',
+                            end: () => `+=${pinnedDistance * 0.4}`,
+                            scrub: 1,
+                            invalidateOnRefresh: true,
+                        },
+                    }
+                );
+            }
+
             // Bounce each letter randomly
             letters.forEach((letter) => {
                 gsap.from(letter, {
@@ -240,6 +280,40 @@ const HorizontalWords = () => {
                         <div className="letter" aria-hidden="true" style={{ position: "relative", display: "inline-block" }}>а</div>
                     </h2>
                 </div>
+            </div>
+
+            <div
+                className="horizontal-words__photo"
+                aria-hidden="true"
+                style={{
+                    position: "absolute",
+                    right: "5vw",
+                    top: "50%",
+                    width: "min(26vw, 380px)",
+                    transform: "translateY(-8%) rotate(-4deg)",
+                    padding: "10px",
+                    borderRadius: "28px",
+                    border: "4px solid var(--color-dark, #1a1a1a)",
+                    backgroundColor: "var(--color-lightgreen, #e6fab9)",
+                    boxShadow: "12px 12px 0 rgba(26, 26, 26, 0.16)",
+                    lineHeight: 0,
+                    zIndex: 15,
+                    pointerEvents: "none",
+                }}
+            >
+                <img
+                    src="https://cdn.prod.website-files.com/683703490bc01e1b8c052e06/686b8e614494dac669a4099c_c310914b5a1a573b4c7499e9531f8d52_DE.avif"
+                    alt=""
+                    loading="lazy"
+                    style={{
+                        display: "block",
+                        width: "100%",
+                        height: "auto",
+                        aspectRatio: "4 / 5",
+                        objectFit: "cover",
+                        borderRadius: "20px",
+                    }}
+                />
             </div>
 
             <div className="horizontal-words__bottom-text">

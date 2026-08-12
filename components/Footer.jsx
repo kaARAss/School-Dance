@@ -108,9 +108,40 @@ export default function Footer() {
             if (mapFrame) {
                 const applySquare = () => {
                     const wrap = mapFrame.parentElement;
-                    if (!wrap) return;
-                    const inner = wrap.clientWidth - 14;
-                    if (inner > 0) mapFrame.style.height = inner + 'px';
+                    const inner = document.querySelector('.footer-inner');
+                    const topRow = document.querySelector('.footer-top');
+                    const bottomRow = document.querySelector('.footer-bottom');
+                    if (!wrap || !inner || !topRow || !bottomRow) return;
+
+                    // Весь подвал обязан помещаться в один экран:
+                    // надпись со стикерами поднимается, лишний низ обрезается
+                    Object.assign(inner.style, {
+                        minHeight: 'calc(100vh - 20px)',
+                        maxHeight: 'calc(100vh - 20px)',
+                        paddingBottom: '24px',
+                        overflow: 'hidden',
+                    });
+                    bottomRow.style.marginTop = '10px';
+
+                    // Карта квадратная по ширине блока
+                    let size = Math.max(0, wrap.clientWidth - 14);
+                    if (!size) return;
+                    mapFrame.style.height = size + 'px';
+
+                    // Если не влезает — укорачиваем карту, оставляя зазор до надписи
+                    const cs = window.getComputedStyle(inner);
+                    const padV = parseFloat(cs.paddingTop || '0') + parseFloat(cs.paddingBottom || '0');
+                    const limit = inner.clientHeight - padV - 50;
+                    let guard = 0;
+                    while (
+                        guard < 80 &&
+                        size > 170 &&
+                        topRow.offsetHeight + bottomRow.offsetHeight + 10 > limit
+                    ) {
+                        size = Math.max(170, size - 20);
+                        mapFrame.style.height = size + 'px';
+                        guard += 1;
+                    }
                 };
                 applySquare();
                 setTimeout(applySquare, 600);
