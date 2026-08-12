@@ -13,6 +13,15 @@ export default function SmoothScroll() {
         // телефона и даёт рывки, поэтому там её не включаем.
         const isTouch = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
 
+        // На телефоне браузер прячет и показывает адресную строку при каждом
+        // движении пальца. Для страницы это выглядит как изменение размера окна,
+        // и все анимации пересчитываются прямо во время прокрутки — отсюда рывки
+        // и кратковременные замирания. Отключаем эту реакцию.
+        ScrollTrigger.config({
+            ignoreMobileResize: true,
+            autoRefreshEvents: 'visibilitychange,DOMContentLoaded,load',
+        });
+
         let lenis = null;
         let tickerFn = null;
 
@@ -31,13 +40,21 @@ export default function SmoothScroll() {
             window.__lenis = lenis;
         }
 
-        // Пересчёт анимаций при повороте экрана и при появлении панелей браузера
+        // Пересчёт только при реальном изменении ширины или повороте экрана.
+        // Изменение одной только высоты на телефоне — это панели браузера, его игнорируем.
         let resizeTimer = null;
+        let lastWidth = window.innerWidth;
         const onResize = () => {
+            if (isTouch && window.innerWidth === lastWidth) return;
+            lastWidth = window.innerWidth;
             clearTimeout(resizeTimer);
             resizeTimer = setTimeout(() => ScrollTrigger.refresh(), 250);
         };
-        window.addEventListener('orientationchange', onResize);
+        const onOrientation = () => {
+            lastWidth = -1;
+            onResize();
+        };
+        window.addEventListener('orientationchange', onOrientation);
         window.addEventListener('resize', onResize);
 
         // Dynamic Tab Title Change
@@ -54,7 +71,7 @@ export default function SmoothScroll() {
                 delete window.__lenis;
             }
             clearTimeout(resizeTimer);
-            window.removeEventListener('orientationchange', onResize);
+            window.removeEventListener('orientationchange', onOrientation);
             window.removeEventListener('resize', onResize);
             document.removeEventListener('visibilitychange', handleVisibility);
         };

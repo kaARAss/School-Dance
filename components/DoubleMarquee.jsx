@@ -102,11 +102,16 @@ export default function DoubleMarquee() {
             display: 'flex',
             flexDirection: 'column',
             gap: '8px',
-            width: '100%',
+            // Ленты упираются в края экрана, выходя за отступы блока
+            position: 'relative',
+            left: '50%',
+            marginLeft: '-50vw',
+            width: '100vw',
+            maxWidth: '100vw',
             height: 'auto',
             overflow: 'hidden',
             padding: '20px 0 32px',
-            margin: '0',
+            marginRight: '0',
         });
 
         const tweens = [];

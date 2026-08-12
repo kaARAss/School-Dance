@@ -44,6 +44,59 @@ const HorizontalWords = () => {
                 return;
             }
 
+            // ─── Нижний абзац: крупный шрифт и набор печатной машинкой ───
+            const typeTarget = container.querySelector('.horizontal-words__bottom-text-l');
+            if (typeTarget && !typeTarget.dataset.typed) {
+                typeTarget.dataset.typed = '1';
+
+                Object.assign(typeTarget.style, {
+                    fontFamily: "'Epilogue', sans-serif",
+                    fontSize: 'clamp(1.6rem, 2.5vw, 2.5rem)',
+                    fontWeight: '750',
+                    lineHeight: '1.18',
+                    letterSpacing: '-1.2px',
+                    maxWidth: '19em',
+                    minHeight: '3.6em',
+                    textAlign: 'center',
+                });
+
+                const fullText = 'Танец — это не только движения, а способ дышать. Мы ставим технику, снимаем стеснение и доводим до сцены.';
+
+                typeTarget.textContent = '';
+                const typedNode = document.createTextNode('');
+                typeTarget.appendChild(typedNode);
+
+                const caret = document.createElement('span');
+                caret.textContent = '▌';
+                caret.setAttribute('aria-hidden', 'true');
+                Object.assign(caret.style, {
+                    marginLeft: '0.06em',
+                    color: 'var(--color-orange, #f5693c)',
+                });
+                typeTarget.appendChild(caret);
+
+                gsap.to(caret, { opacity: 0, duration: 0.45, repeat: -1, yoyo: true, ease: 'steps(1)' });
+
+                const typeState = { chars: 0 };
+                gsap.to(typeState, {
+                    chars: fullText.length,
+                    duration: fullText.length * 0.026,
+                    ease: 'none',
+                    scrollTrigger: {
+                        trigger: container,
+                        start: 'top 85%',
+                        once: true,
+                    },
+                    onUpdate: () => {
+                        typedNode.nodeValue = fullText.slice(0, Math.round(typeState.chars));
+                    },
+                    onComplete: () => {
+                        typedNode.nodeValue = fullText;
+                        gsap.to(caret, { opacity: 0, duration: 0.4, delay: 1.2, overwrite: true });
+                    },
+                });
+            }
+
             // Select the individual stickers instead of just the wrapper
             // or we select the images directly if they are the elements we want to animate.
             // The original logic animated .horizontal-words__sticker-svg, but since you have multiple images:
@@ -201,8 +254,8 @@ const HorizontalWords = () => {
 
             <div className="horizontal-words__bottom-text">
                 <div className="horizontal-words__bottom-text-l">
-                    Танец — это не только движения, <em>а</em> способ дышать<br />
-                    чем кажется. Мы ставим технику, снимаем стеснение<br />
+                    Танец — это не только движения, <em>а</em> способ дышать.<br />
+                    Мы ставим технику, снимаем стеснение<br />
                     и доводим до сцены.
                 </div>
             </div>

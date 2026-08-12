@@ -456,7 +456,12 @@
         display: flex !important;
         flex-direction: column;
         gap: 8px;
-        width: 100%;
+        position: relative;
+        left: 50%;
+        margin-left: -50vw !important;
+        margin-right: 0 !important;
+        width: 100vw !important;
+        max-width: 100vw !important;
         height: auto;
         overflow: hidden !important;
         padding: 20px 0 32px !important;
@@ -536,5 +541,12 @@
         left: auto !important;
         bottom: 27% !important;
         width: 88px !important;
+    }
+
+    /* 8. Ровная прокрутка: браузер не пересчитывает высоту из-за своих панелей */
+    .cards-mobile-static .card,
+    .marquee-right .marquee-track {
+        backface-visibility: hidden;
+        transform-style: flat;
     }
 }

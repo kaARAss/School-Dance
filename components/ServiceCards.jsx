@@ -220,7 +220,7 @@ function initCardAnimations() {
             card.addEventListener('touchcancel', onRelease);
         });
 
-        // Пересчёт позиций после подгрузки шрифтов и картинок
-        [400, 1200, 2500].forEach((ms) => setTimeout(() => ScrollTrigger.refresh(), ms));
+        // Один пересчёт после подгрузки шрифтов и картинок: частые пересчёты сами дают рывки
+        setTimeout(() => ScrollTrigger.refresh(), 1200);
     }
 }
