@@ -362,3 +362,148 @@
         left: 20px;
     }
 }
+
+
+/* ─── Волна 4: штора, заголовок карточек, перенос слов, список карточек ─── */
+@media (max-width: 768px) {
+
+    /* 1. Рисованный штрих подменён полноэкранной шторой */
+    .transition-scribble {
+        display: none !important;
+    }
+
+    /* 2. Заголовок блока с фотографиями больше не наезжает сам на себя */
+    .motion-card__title {
+        font-size: 1.95rem !important;
+        letter-spacing: -1px !important;
+        line-height: 1.05 !important;
+    }
+
+    .motion-card__subtitle {
+        font-size: 1.95rem !important;
+        line-height: 1.15 !important;
+        letter-spacing: 0 !important;
+        top: 0 !important;
+        display: block !important;
+        margin-top: 4px !important;
+    }
+
+    /* 3. Перенос целыми словами */
+    .is-mobile-static .horizontal-words__h2 {
+        font-size: 10.5vw !important;
+        line-height: 1.02 !important;
+        word-spacing: 0.12em;
+    }
+
+    .is-mobile-static .letter-space {
+        display: none !important;
+    }
+
+    .hw-word {
+        display: inline-block;
+        white-space: nowrap;
+        margin-right: 0.26em;
+    }
+
+    /* 4. Карточки направлений: обычный список, ничего не залипает */
+    .cards-wrapper.cards-mobile-static {
+        position: relative;
+        height: auto !important;
+        max-width: 100%;
+        margin: 30px auto 50px !important;
+        padding: 0 16px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 24px;
+    }
+
+    .cards-mobile-static .card {
+        position: relative !important;
+        left: auto !important;
+        top: auto !important;
+        right: auto !important;
+        width: 100% !important;
+        max-width: 340px;
+        height: auto !important;
+        min-height: 330px;
+        z-index: auto !important;
+    }
+}
+
+
+/* ─── Волна 5: бегущая лента логотипов и мгновенный показ текста ─── */
+@media (max-width: 768px) {
+
+    /* Шрифты: показываем текст сразу системным начертанием,
+       а не держим надписи пустыми до загрузки файла шрифта */
+    @font-face {
+        font-family: 'DM Sans';
+        src: url('/fonts/DMSans-VariableFont_opsz,wght.ttf') format('truetype');
+        font-weight: 100 900;
+        font-display: swap;
+    }
+
+    @font-face {
+        font-family: 'Epilogue';
+        src: url('/fonts/Epilogue-VariableFont_wght.ttf') format('truetype');
+        font-weight: 100 900;
+        font-display: swap;
+    }
+
+    /* Лента: вместо статичной сетки — две строки, едущие навстречу */
+    .marquee-right {
+        display: flex !important;
+        flex-direction: column;
+        gap: 8px;
+        width: 100%;
+        height: auto;
+        overflow: hidden !important;
+        padding: 20px 0 32px !important;
+    }
+
+    .marquee-column {
+        display: block !important;
+        width: 100%;
+        overflow: hidden !important;
+    }
+
+    .marquee-column::before,
+    .marquee-column::after {
+        display: none !important;
+    }
+
+    .marquee-column .marquee-track {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        gap: 0 !important;
+        width: max-content;
+        will-change: transform;
+    }
+
+    .marquee-column:nth-child(1) .marquee-track {
+        animation: marqueeRowLeft 32s linear infinite !important;
+    }
+
+    .marquee-column:nth-child(2) .marquee-track {
+        animation: marqueeRowRight 32s linear infinite !important;
+    }
+
+    .marquee-right .marquee-item {
+        width: 118px !important;
+        height: 118px !important;
+        flex: 0 0 118px !important;
+        margin: 0 8px 0 0 !important;
+    }
+
+    @keyframes marqueeRowLeft {
+        from { transform: translateX(0); }
+        to   { transform: translateX(-50%); }
+    }
+
+    @keyframes marqueeRowRight {
+        from { transform: translateX(-50%); }
+        to   { transform: translateX(0); }
+    }
+}

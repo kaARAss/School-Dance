@@ -50,6 +50,47 @@ export default function TransitionScribble() {
 
             transitionLogo.style.color = logoColor;
 
+            // ─── Телефон: рисованный штрих не закрывает узкий экран целиком,
+            //     поэтому используем полноэкранную штору того же цвета ───
+            if (window.matchMedia('(max-width: 768px)').matches) {
+                let veil = document.querySelector('.transition-veil');
+                if (!veil) {
+                    veil = document.createElement('div');
+                    veil.className = 'transition-veil';
+                    veil.style.cssText = 'position:fixed; top:0; left:0; width:100%; height:100%; z-index:9998; pointer-events:none; will-change:transform;';
+                    document.body.appendChild(veil);
+                }
+                veil.style.background = randomColor;
+
+                const dIn = 0.75;
+                const dOut = 0.95;
+
+                document.body.classList.add('is-transitioning');
+                gsap.set(transitionScribbleSvg, { opacity: 0 });
+                gsap.set(veil, { yPercent: 100, opacity: 1 });
+                gsap.set(transitionLogo, { opacity: 0, scale: 1 });
+
+                const mobileTl = gsap.timeline({
+                    onComplete: () => {
+                        document.body.classList.remove('is-transitioning');
+                        gsap.set(veil, { yPercent: 100, opacity: 0 });
+                        gsap.set(transitionLogo, { opacity: 0 });
+                    }
+                });
+
+                mobileTl.to(veil, { yPercent: 0, duration: dIn, ease: 'power2.inOut' }, 0);
+                mobileTl.call(() => {
+                    const lenis = window.__lenis;
+                    if (lenis) lenis.scrollTo(0, { immediate: true });
+                    else window.scrollTo(0, 0);
+                }, null, dIn);
+                mobileTl.to(transitionLogo, { autoAlpha: 1, duration: 0.25, ease: 'power2.out' }, dIn * 0.55);
+                mobileTl.to(transitionLogo, { autoAlpha: 0, duration: 0.2, ease: 'power2.in' }, dIn + dOut * 0.35);
+                mobileTl.to(veil, { yPercent: -100, duration: dOut, ease: 'power2.inOut' }, dIn + 0.12);
+                return;
+            }
+
+
             gsap.set(transitionScribblePath, { strokeDasharray: l, strokeDashoffset: l, strokeWidth: config.strokeWidthStart, opacity: 1 });
             gsap.set(transitionScribbleSvg, { opacity: 1, x: 0, y: 0, rotation: 0 });
             gsap.set(transitionLogo, { opacity: 0, scale: 1 });

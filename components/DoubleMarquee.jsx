@@ -52,7 +52,8 @@ function buildMarqueeItems(isMobile) {
         const shuffledBrands = shuffleNoAdjacentSrc(brands);
         const assignedColors = assignColorsNoAdjacent(shuffledBrands.length, colors);
         const items = shuffledBrands.map((brand, i) => ({ brand, color: assignedColors[i] }));
-        tracks[t] = isMobile ? items : [...items, ...items]; // duplicate for seamless loop
+        // Дубль нужен и на телефоне: без него бегущая строка не замыкается
+        tracks[t] = [...items, ...items];
     }
     return tracks;
 }

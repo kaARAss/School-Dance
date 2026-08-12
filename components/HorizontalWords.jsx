@@ -20,6 +20,26 @@ const HorizontalWords = () => {
             // слова за край — получались пустые экраны. Показываем обычным блоком.
             if (window.matchMedia('(max-width: 768px)').matches) {
                 container.classList.add('is-mobile-static');
+
+                // Буквы лежат отдельными блоками, поэтому строка рвётся
+                // по одной букве. Склеиваем их в неразрывные слова.
+                const mobileH2 = container.querySelector('.horizontal-words__h2');
+                if (mobileH2 && !mobileH2.dataset.mobileWords) {
+                    mobileH2.dataset.mobileWords = '1';
+                    const nodes = Array.from(mobileH2.children);
+                    let wordBox = null;
+                    nodes.forEach((el) => {
+                        if (el.classList.contains('letter-space')) { wordBox = null; return; }
+                        if (!el.classList.contains('letter')) return;
+                        if (!wordBox) {
+                            wordBox = document.createElement('span');
+                            wordBox.className = 'hw-word';
+                            mobileH2.insertBefore(wordBox, el);
+                        }
+                        wordBox.appendChild(el);
+                    });
+                }
+
                 gsap.set(textRef, { clearProps: 'all' });
                 return;
             }

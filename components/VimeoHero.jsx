@@ -19,10 +19,10 @@ export default function VimeoHero() {
 
     /* ── Телефону отдаём лёгкую копию ролика, компьютеру — полное качество ── */
     useEffect(() => {
-        const narrow = window.matchMedia('(max-width: 768px)').matches;
         const conn = navigator.connection;
-        const saveData = !!(conn && (conn.saveData || /2g/.test(conn.effectiveType || '')));
-        setVideoSrc(narrow || saveData ? '/assets/hero-mobile.mp4' : '/assets/hero.mp4');
+        const slowNetwork = !!(conn && (conn.saveData || /^(slow-2g|2g|3g)$/.test(conn.effectiveType || '')));
+        // Полное качество везде, включая телефоны; лёгкая копия — только на слабой сети
+        setVideoSrc(slowNetwork ? '/assets/hero-mobile.mp4' : '/assets/hero.mp4');
     }, []);
 
 
