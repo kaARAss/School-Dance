@@ -236,3 +236,129 @@
         display: none;
     }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Вторая волна: по живым скриншотам с телефона
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+
+    /* Шапка была прозрачной, и весь текст проезжал сквозь неё при прокрутке */
+    .navbar.on-light {
+        background: var(--bg-color);
+        box-shadow: 0 2px 14px rgba(0, 0, 0, 0.07);
+    }
+
+    /* Над тёмным видео фон не нужен — там светлый текст */
+    .navbar.on-dark {
+        background: transparent;
+        box-shadow: none;
+    }
+
+    /* Слово «студия» и надпись truus рядом не влезают и налезали друг на друга */
+    .nav-center {
+        display: none !important;
+    }
+
+    /* ── Блок бегущих слов обычным блоком ── */
+    .horizontal-words-section.is-mobile-static {
+        height: auto !important;
+        padding: 80px 0 50px;
+        overflow: hidden;
+    }
+
+    .is-mobile-static .horizontal-words__relative {
+        position: relative;
+        top: auto;
+        left: auto;
+        transform: none !important;
+        white-space: normal;
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 0 18px;
+    }
+
+    .is-mobile-static .horizontal-words__h2 {
+        font-size: 13vw;
+        white-space: normal;
+        text-align: center;
+    }
+
+    .is-mobile-static .horizontal-words__bottom-text {
+        position: relative;
+        left: auto;
+        top: auto;
+        transform: none !important;
+        width: 100%;
+        margin-top: 26px;
+    }
+
+    /* Стрелки и стикеры расставлены под длинную строку — в столбик они попадают на текст */
+    .is-mobile-static .horizontal-words__arrow-svg,
+    .is-mobile-static .horizontal-words__arrow-end-svg,
+    .is-mobile-static .horizontal-words__placeholder-left-svg,
+    .is-mobile-static .horizontal-words__sticker-watch,
+    .is-mobile-static .horizontal-words__sticker-cursor,
+    .is-mobile-static .horizontal-words__sticker-phone {
+        display: none !important;
+    }
+
+    /* ── Заголовок блока с фото не должен упираться в шапку ── */
+    .motion-card-section {
+        padding-top: 80px;
+    }
+
+    .motion-card__title {
+        font-size: 2.1rem;
+    }
+
+    .motion-card__subtitle {
+        font-size: 2.2rem;
+    }
+
+    .motion-card__sticker--top {
+        width: 70px !important;
+        height: 40px !important;
+        right: 0 !important;
+        top: -34px !important;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Третья волна: первый экран и сдвиг страницы вбок
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+
+    /* При загрузке страницу уводило вбок: запрещаем горизонтальный сдвиг целиком */
+    html {
+        overflow-x: hidden;
+        overscroll-behavior-x: none;
+        max-width: 100%;
+    }
+
+    body {
+        max-width: 100%;
+        overscroll-behavior-x: none;
+    }
+
+    /* ── Заголовок на видео ──
+       Стикеры (смайлик и звёздочка) расставлены в долях размера шрифта,
+       поэтому меньший заголовок сам втягивает их обратно в экран. */
+    .home-header__title {
+        bottom: 92px;
+        padding: 0 22px;
+    }
+
+    .vimeo-hero__title {
+        font-size: clamp(1.6rem, 8.2vw, 2.5rem);
+        letter-spacing: -1px;
+        line-height: 1.06;
+    }
+
+    /* Кнопки паузы и полного экрана были вплотную к тексту */
+    .vimeo-hero__controls {
+        bottom: 20px;
+        left: 20px;
+    }
+}

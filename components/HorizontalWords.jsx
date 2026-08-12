@@ -16,6 +16,14 @@ const HorizontalWords = () => {
             const textRef = container.querySelector('.horizontal-words__relative');
             const letters = container.querySelectorAll('.letter');
 
+            // На телефоне блок прибивался к экрану на 2500 пикселей прокрутки и уводил
+            // слова за край — получались пустые экраны. Показываем обычным блоком.
+            if (window.matchMedia('(max-width: 768px)').matches) {
+                container.classList.add('is-mobile-static');
+                gsap.set(textRef, { clearProps: 'all' });
+                return;
+            }
+
             // Select the individual stickers instead of just the wrapper
             // or we select the images directly if they are the elements we want to animate.
             // The original logic animated .horizontal-words__sticker-svg, but since you have multiple images:
