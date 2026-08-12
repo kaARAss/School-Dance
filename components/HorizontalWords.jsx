@@ -140,23 +140,6 @@ const HorizontalWords = () => {
             });
             // ------------------------------------
 
-            // Абзац справа от стрелки уезжает влево вместе со словами,
-            // пока стрелка не дойдёт до середины экрана
-            const bottomText = container.querySelector('.horizontal-words__bottom-text');
-            if (bottomText) {
-                gsap.to(bottomText, {
-                    xPercent: -150,
-                    ease: 'none',
-                    scrollTrigger: {
-                        trigger: container,
-                        start: 'top top',
-                        end: () => `+=${pinnedDistance * 0.55}`,
-                        scrub: 1,
-                        invalidateOnRefresh: true,
-                    },
-                });
-            }
-
             // Bounce each letter randomly
             letters.forEach((letter) => {
                 gsap.from(letter, {

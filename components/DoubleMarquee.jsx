@@ -172,11 +172,10 @@ export default function DoubleMarquee() {
 
         const tween = gsap.fromTo(
             photo,
-            { opacity: 0, scale: 0.85, rotation: -14, y: 60 },
+            { opacity: 0, scale: 0.9, y: 60 },
             {
                 opacity: 1,
                 scale: 1,
-                rotation: -4,
                 y: 0,
                 duration: 1,
                 ease: 'power3.out',
@@ -226,7 +225,7 @@ export default function DoubleMarquee() {
                 aria-hidden="true"
                 style={{
                     flex: '0 0 auto',
-                    width: 'min(26vw, 360px)',
+                    width: 'min(34vw, 520px)',
                     alignSelf: 'center',
                     margin: '0 auto',
                     padding: '10px',
@@ -234,7 +233,6 @@ export default function DoubleMarquee() {
                     border: '4px solid var(--color-dark, #1a1a1a)',
                     backgroundColor: 'var(--color-lightgreen, #e6fab9)',
                     boxShadow: '14px 14px 0 rgba(26, 26, 26, 0.16)',
-                    transform: 'rotate(-4deg)',
                     lineHeight: 0,
                     pointerEvents: 'none',
                     zIndex: 4,
